@@ -1,72 +1,17 @@
 
-
 # Kasal Documentation Hub
 
-**Enterprise AI Agent Orchestration Platform**
+**Enterprise AI Agent Workflow Orchestration Platform**
+
+---
+
+## What Is Kasal?
+
+Kasal is an enterprise-grade platform for designing, deploying, and monitoring autonomous AI agent workflows. It provides a drag-and-drop visual designer where users compose teams of AI agents, define tasks, and orchestrate multi-step pipelines — all backed by the [CrewAI](https://crewai.com) engine and deeply integrated with Databricks.
 
 ---
 
 ## Quick Start
-Find the right documentation for your role and get productive fast.
-
-Choose your documentation based on your role:
-
-
-## Technical Documentation
-Developer-focused guides, code structure, and API reference.
-### [Code structure Guide](./CODE_STRUCTURE_GUIDE.md)
-**For Software Engineers and Developers**
-
-Build and integrate with Kasal's powerful AI orchestration platform. From quick starts to advanced implementations.
-
-**Key Topics:**
-- High level code structure
-- Different folders and underlying components
-
----
-
-### [Developer Guide](./DEVELOPER_GUIDE.md)
-**For Software Engineers and Developers**
-
-Build and integrate with Kasal's powerful AI orchestration platform. From quick starts to advanced implementations.
-
-**Key Topics:**
-- 30-Second Quick Start with Code Examples
-- API Integration and SDK Usage
-- Testing Strategies and Best Practices
-- Production Deployment Guides
-
-### [API Reference](./API_REFERENCE.md)
-**For API Integrators and Backend Engineers**
-
-Complete REST API documentation with examples, WebSocket events, and SDK libraries.
-
-**Key Topics:**
-- RESTful Endpoints Documentation
-- WebSocket Real-time Events
-- Authentication and Authorization
-- Rate Limits and Error Handling
-
----
-
-## Architecture Documentation
-System design, patterns, and enterprise integration guidance.
-
-### [Solution Architecture Guide](./ARCHITECTURE_GUIDE.md)
-**For Solution Architects and Technical Leaders**
-
-Understand Kasal's architecture, design patterns, and enterprise integration strategies.
-
-**Key Topics:**
-- System Design and Components
-- Security Model and Compliance
-- Scaling Strategies and Performance
-- Integration Patterns and Best Practices
-
----
-
-## Getting Started in 30 Seconds
-One command sequence to run both backend and frontend locally.
 
 ```bash
 # Clone the repository
@@ -83,75 +28,107 @@ Access the application at `http://localhost:3000`
 
 ---
 
-## Key Features
-What Kasal provides out of the box to build, operate, and govern AI workflows.
+## Documentation Index
 
-| Feature | Description |
-|---------|-------------|
-| **AI Agent Orchestration** | Create and manage teams of AI agents working together |
-| **Visual Workflow Designer** | Drag-and-drop interface for creating complex workflows |
-| **Enterprise Security** | SOC2 compliant with role-based access control |
-| **Databricks Integration** | Native integration with Databricks platform |
-| **Scalable Architecture** | Microservices-ready, horizontally scalable design |
-| **Multi-Model Support** | Support for GPT-4, Claude, Databricks models, and more |
+### Architecture & Design
+| Document | Audience | Description |
+|----------|----------|-------------|
+| [Architecture Guide](./ARCHITECTURE_GUIDE.md) | Architects, Tech Leads | System design, layers, patterns, security model |
+| [Code Structure Guide](./CODE_STRUCTURE_GUIDE.md) | Developers | File layout, module responsibilities, naming conventions |
+| [Data Models](./DATA_MODELS.md) | Architects, DBAs, Developers | Conceptual, logical, and physical data model diagrams |
+| [Data Architecture Template](./DATA_ARCHITECTURE_TEMPLATE.md) | Architects, DBAs | Reusable template for data architecture documentation |
+| [Documentation Structure](./DOCUMENTATION_STRUCTURE.md) | All | Conceptual, logical, and physical diagrams of the docs folder itself |
+
+### Development
+| Document | Audience | Description |
+|----------|----------|-------------|
+| [Developer Guide](./DEVELOPER_GUIDE.md) | Backend & Frontend Engineers | Setup, workflows, coding conventions, testing |
+| [Configuration Guide](./CONFIGURATION_GUIDE.md) | DevOps, Developers | Environment variables, database, auth, LLM settings |
+
+### API & Security
+| Document | Audience | Description |
+|----------|----------|-------------|
+| [API Reference](./API_REFERENCE.md) | API Integrators | REST endpoints, WebSocket events, request/response examples |
+| [Security Guide](./SECURITY_GUIDE.md) | Security Engineers, Admins | Auth, RBAC, multi-tenancy, secrets management |
+
+### User Guides
+| Document | Audience | Description |
+|----------|----------|-------------|
+| [End User Tutorial Catalog](./END_USER_TUTORIAL_CATALOG.md) | End Users | Step-by-step tutorials for building workflows |
+| [Why Kasal](./WHY_KASAL.md) | Stakeholders | Problem statement, value proposition |
+
+### Legacy / Archive
+Older deep-dive documents are in [archive/](./archive/) and may be outdated but contain useful historical context.
 
 ---
 
-## Documentation Structure
-How this folder is organized and where to find topics.
+## Key Features
 
-```
-docs/
-├── README.md                    # This file - Documentation hub
-├── CODE_STRUCTURE_GUIDE.md      # Code structure documentation
-├── DEVELOPER_GUIDE.md           # Developer documentation
-├── ARCHITECTURE_GUIDE.md        # Architecture documentation
-├── API_REFERENCE.md             # API reference
-└── archive/                     # Legacy documentation
-    ├── technical/               # Technical deep-dives
-    ├── security/                # Security documentation
-    └── guides/                  # Various guides
-```
+| Feature | Description |
+|---------|-------------|
+| **Visual Workflow Designer** | Drag-and-drop ReactFlow canvas to compose agent crews and task graphs |
+| **AI Agent Orchestration** | CrewAI-powered sequential and hierarchical crew execution |
+| **Multi-Model Support** | GPT-4, Claude, Databricks Foundation Models, Llama, and more via LiteLLM |
+| **Databricks Integration** | Native connectors for Genie, Jobs, Vector Search, Secrets, Volumes |
+| **Memory & Knowledge** | Configurable short-term, long-term, and entity memory with Vector Search |
+| **MCP Tool Support** | Model Context Protocol integration for extensible custom tooling |
+| **Real-time Monitoring** | Live execution logs, task traces, and status tracking |
+| **Scheduling** | Cron-based job scheduling for recurring workflows |
+| **Multi-Tenancy** | Group-based workspace isolation with role-based access control |
+| **DSPy Optimization** | Optional prompt optimization via DSPy framework |
 
 ---
 
 ## Technology Stack
-Core frameworks and platforms used across the project.
 
-- **Backend**: FastAPI, SQLAlchemy 2.0, Python 3.9+
-- **Frontend**: React 18, TypeScript, Material-UI
-- **AI Engine**: CrewAI, LangChain
-- **Database**: PostgreSQL / SQLite
-- **Authentication**: JWT + Databricks OAuth
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | FastAPI 0.110+, SQLAlchemy 2.0+, Alembic, Python 3.10+ |
+| **Frontend** | React 18, TypeScript 4.9, Material-UI 5.17, ReactFlow 11.10 |
+| **AI Engine** | CrewAI 0.193+, LiteLLM 1.74+, LangChain |
+| **Database** | PostgreSQL (production) / SQLite (development) |
+| **Authentication** | JWT + Databricks OAuth 2.0 |
+| **Observability** | MLflow 3.4, structured logging |
+| **Package Manager** | uv (backend), npm (frontend) |
 
 ---
 
-## Support and Resources
-Where to get help and how to contribute.
+## Project Structure
 
-### Getting Help
-
-- **GitHub Issues**: [github.com/databrickslabs/kasal/issues](https://github.com/databrickslabs/kasal/issues)
-- **Email**: Contact your Databricks support team
-- **Documentation**: You're already here!
-
-### Contributing
-
-We welcome contributions! Please see our [Contributing Guide](https://github.com/databrickslabs/kasal/blob/main/CONTRIBUTING.md) for details.
-
-### License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/databrickslabs/kasal/blob/main/LICENSE) file for details.
+```
+kasal/
+├── src/
+│   ├── backend/              # FastAPI Python backend
+│   │   ├── src/              # Application source code
+│   │   ├── tests/            # Unit and integration tests
+│   │   ├── migrations/       # Alembic database migrations
+│   │   └── pyproject.toml    # Python dependencies
+│   ├── frontend/             # React TypeScript frontend
+│   │   ├── src/              # React application source
+│   │   └── package.json      # npm dependencies
+│   ├── frontend_static/      # Built frontend assets
+│   └── docs/                 # This documentation
+├── README.md                 # Project overview
+├── CONTRIBUTING.md           # Contribution guidelines
+└── manifest.yaml             # Databricks Apps manifest
+```
 
 ---
 
 ## Version Information
-Project and documentation version details.
 
 - **Current Version**: 2.0.0
-- **Documentation Updated**: December 2025
+- **Documentation Updated**: April 2026
 - **Minimum Python Version**: 3.10
-- **Minimum Node Version**: 16.0
+- **Minimum Node Version**: 18.0
+
+---
+
+## Support and Resources
+
+- **GitHub Issues**: [github.com/databrickslabs/kasal/issues](https://github.com/databrickslabs/kasal/issues)
+- **Contributing**: [CONTRIBUTING.md](https://github.com/databrickslabs/kasal/blob/main/CONTRIBUTING.md)
+- **License**: Apache License 2.0
 
 ---
 

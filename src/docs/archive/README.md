@@ -37,6 +37,9 @@ This folder contains legacy and technical documentation that has been archived d
 - **ZUSTAND_PERMISSION_IMPLEMENTATION.md** - Permission implementation
 
 ### Guides (`/guides`)
+- **ARCHITECTURE_GUIDE_PREVIOUS.md** - Previous version of ARCHITECTURE_GUIDE.md (before April 2026 rewrite)
+- **CODE_STRUCTURE_GUIDE_PREVIOUS.md** - Previous version of CODE_STRUCTURE_GUIDE.md (before April 2026 rewrite)
+- **DEVELOPER_GUIDE_PREVIOUS.md** - Previous version of DEVELOPER_GUIDE.md (before April 2026 rewrite)
 - **hierarchical-process.md** - Hierarchical process documentation
 - **knowledge-search-tool.md** - Knowledge search guide
 - **lakebase-integration.md** - Lakebase integration
