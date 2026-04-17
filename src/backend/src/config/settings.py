@@ -90,6 +90,11 @@ class Settings(BaseSettings):
     # Add the following setting to control database seeding
     AUTO_SEED_DATABASE: bool = True
 
+    # Databricks connection settings (used for SPN authentication)
+    DATABRICKS_HOST: Optional[str] = None
+    DATABRICKS_CLIENT_ID: Optional[str] = None
+    DATABRICKS_CLIENT_SECRET: Optional[str] = None
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

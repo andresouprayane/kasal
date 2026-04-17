@@ -408,10 +408,17 @@ class DatabricksAuth:
     def _check_oauth_environment(self):
         """Check for OAuth credentials in environment variables (for service principal auth)."""
         try:
-            # Check for OAuth environment variables
-            client_id = os.environ.get('DATABRICKS_CLIENT_ID')
-            client_secret = os.environ.get('DATABRICKS_CLIENT_SECRET')
-            databricks_host = os.environ.get('DATABRICKS_HOST')
+            # Read from pydantic settings first (covers values defined in .env file),
+            # then fall back to raw os.environ for values set directly in the shell.
+            try:
+                from src.config.settings import settings as _settings
+                client_id = _settings.DATABRICKS_CLIENT_ID or os.environ.get('DATABRICKS_CLIENT_ID')
+                client_secret = _settings.DATABRICKS_CLIENT_SECRET or os.environ.get('DATABRICKS_CLIENT_SECRET')
+                databricks_host = _settings.DATABRICKS_HOST or os.environ.get('DATABRICKS_HOST')
+            except Exception:
+                client_id = os.environ.get('DATABRICKS_CLIENT_ID')
+                client_secret = os.environ.get('DATABRICKS_CLIENT_SECRET')
+                databricks_host = os.environ.get('DATABRICKS_HOST')
 
             # If we have OAuth credentials, store them for SPN auth
             if client_id and client_secret:
@@ -579,8 +586,11 @@ class DatabricksAuth:
                     logger.info(f"Successfully obtained service principal OAuth token (expires in {self._service_token_expires_in}s)")
                     return auth_result.access_token
                 else:
-                    logger.error("No access token in authentication result")
-                    return None
+                    # SDK returned a callable (header-injector) instead of a token object.
+                    # This is the normal SDK behaviour for oauth-m2m — fall through to the
+                    # manual HTTP flow which calls the token endpoint directly.
+                    logger.warning("SDK authenticate() returned no access_token attribute, falling back to manual OAuth flow")
+                    return await self._manual_oauth_flow()
 
             except Exception as sdk_error:
                 logger.error(f"SDK OAuth failed, trying manual approach: {sdk_error}")
@@ -1063,12 +1073,42 @@ async def get_auth_context(
         else:
             logger.info("[AUTH] Priority 3: Service Principal credentials not configured, skipping SPN")
 
+        # Priority 4: Databricks CLI fallback (uses ~/.databrickscfg auth_type = databricks-cli)
+        logger.info("[AUTH] Priority 4: Attempting Databricks CLI authentication fallback")
+        try:
+            import subprocess
+            import json as _json
+            cli_result = subprocess.run(
+                ["databricks", "auth", "token", "--host", workspace_url],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if cli_result.returncode == 0 and cli_result.stdout:
+                token_data = _json.loads(cli_result.stdout)
+                cli_token = token_data.get("access_token")
+                if cli_token:
+                    logger.info("[AUTH] Priority 4: ✓ Databricks CLI authentication successful")
+                    return AuthContext(
+                        token=cli_token,
+                        workspace_url=workspace_url,
+                        auth_method="databricks-cli",
+                        user_identity=None
+                    )
+                else:
+                    logger.warning("[AUTH] Priority 4: ✗ No access_token in CLI response")
+            else:
+                logger.warning(f"[AUTH] Priority 4: ✗ CLI command failed (rc={cli_result.returncode}): {cli_result.stderr.strip()}")
+        except Exception as e:
+            logger.warning(f"[AUTH] Priority 4: ✗ Databricks CLI fallback failed: {e}")
+
         # No authentication method available
         logger.error("No authentication method available")
         logger.error("Please configure at least one authentication method:")
         logger.error("  1. OBO: User token from request headers (automatic when authenticated)")
         logger.error("  2. PAT: Configure via API Keys Service (Configuration → API Keys)")
         logger.error("  3. SPN: Configure via Databricks authentication settings")
+        logger.error("  4. CLI: Configure ~/.databrickscfg with auth_type = databricks-cli")
         return None
 
     except Exception as e:
